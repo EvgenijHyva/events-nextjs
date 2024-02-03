@@ -2,6 +2,9 @@ import Image from 'next/image';
 import { Event } from '../../dummy-data';
 import styles from "./event-item.module.css";
 import Button from './ui/button/button';
+import DateIcon from './ui/icons/date-icon';
+import AddressIcon from './ui/icons/address-icon';
+import ArrowRightIcon from './ui/icons/arrow-right-icon';
 
 interface EventItemProps {
 	event: Event;
@@ -29,18 +32,24 @@ export default function EventItem({ event }: EventItemProps) {
 				<div className={styles.summary}>
 					<h2>{event.title}</h2>
 					<div className={styles.date}>
+						<DateIcon />
 						<time>
 							{humanReadableDate}
 						</time>
 					</div>
 					<div className={styles.address}>
+						<AddressIcon />
 						<address>
 							{formatedAddress}
 						</address>
 					</div>
 				</div>
 				<div className={styles.actions}>
-					<Button href={exploreLink} >Explore event</Button>
+					<Button href={exploreLink} >
+						<span> Explore event
+							<span className={styles.icon}><ArrowRightIcon /></span>
+						</span>
+					</Button>
 				</div>
 			</div>
 		</li>
