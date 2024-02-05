@@ -9,8 +9,8 @@ export interface Event {
 }
 
 export interface EventFilter {
-	year: number;
-	month: number;
+	year: string;
+	month: string;
 }
 
 const DUMMY_EVENTS: Event[] = [
@@ -59,7 +59,7 @@ export function getFilteredEvents(dateFilter: EventFilter): Event[] {
 
 	let filteredEvents = DUMMY_EVENTS.filter((event) => {
 		const eventDate = new Date(event.date);
-		return eventDate.getFullYear() === year && eventDate.getMonth() === month - 1;
+		return eventDate.getFullYear() === Number(year) && eventDate.getMonth() === Number(month) - 1;
 	});
 
 	return filteredEvents;
