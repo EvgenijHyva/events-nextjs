@@ -5,7 +5,7 @@ export default function FilteredEvents() {
 
 	console.log(router.query, router.pathname)
 	return <>
-		Here we have dummy events with slug
+
 	</>
 
 }
