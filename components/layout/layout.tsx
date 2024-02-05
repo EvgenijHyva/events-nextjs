@@ -1,6 +1,6 @@
 import MainHeader from './main-header';
 
-interface LayoutProps {
+export interface LayoutProps {
 	children: JSX.Element
 }
 
