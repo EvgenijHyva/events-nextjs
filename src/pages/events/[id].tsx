@@ -7,7 +7,7 @@ import EventContent from '../../../components/event-detail/event-content';
 import { Event, getEventById } from '../../../helpers/api-utils';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { getAllEvents } from '../../../dummy-data';
+import { getFeaturedEvents } from '../../../dummy-data';
 
 interface EventIdProps {
 	event: Event;
@@ -18,26 +18,23 @@ interface ContextParams extends ParsedUrlQuery {
 }
 
 export default function EventsID({ event }: EventIdProps) {
-
-	if (!event) {
-		notFound();
-	}
-
-	return (<>
+	return (event ? <>
 		<EventSummary title={event.title} />
 		<EventLogistics {...event} />
 		<EventContent>
 			<p>{event.description}</p>
 		</EventContent>
-	</>);
+	</> : <div className='center'>
+		<p>Loading...</p>
+	</div>);
 }
 
 export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async () => {
-	const events = await getAllEvents();
+	const events = await getFeaturedEvents();
 	const paths = events.map(event => ({ params: { id: event.id } }));
 	return {
 		paths,
-		fallback: false
+		fallback: "blocking"
 	}
 }
 
@@ -45,5 +42,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 	const { id } = context.params as ContextParams;
 	const event = await getEventById(id)
 
-	return { props: { event } }
+	return {
+		props: { event },
+		revalidate: 30 // new request regenation after 30s, prod optimization 
+	}
 } 

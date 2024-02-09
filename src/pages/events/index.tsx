@@ -25,7 +25,9 @@ export async function getStaticProps() {
 	const events = await getAllEvents();
 
 	return {
-		props: { events },
-		revalidate: 30 // new request regenation after 30s, prod optimization };
+		props: {
+			events
+		},
+		revalidate: 60 // every minute for request it will regenerate
 	};
-}
+}; 
