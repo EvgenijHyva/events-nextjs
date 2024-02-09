@@ -1,15 +1,15 @@
-import AddressIcon from '../icons/address-icon';;
-import DateIcon from '../icons/date-icon';
+import AddressIcon from '../ui/icons/address-icon';;
+import DateIcon from '../ui/icons/date-icon';
 import LogisticsItem from './logistics-item';
 import styles from './event-logistics.module.css';
-import { Event } from '../../dummy-data';
+import { Event } from '../../helpers/api-utils';
+
 
 interface EventLogisticsProps extends Pick<Event, "date" | "image" | "location" | "title"> { }
 
 export default function EventLogistics(props: EventLogisticsProps) {
   const { date, location, image, title } = props;
 
-  console.log(props)
   const humanReadableDate = new Date(date).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',

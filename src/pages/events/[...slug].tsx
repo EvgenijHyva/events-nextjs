@@ -32,3 +32,7 @@ export default function FilteredEvents() {
 	</>
 
 }
+
+export async function getStaticProps(context: any) {
+	console.log(context)
+}

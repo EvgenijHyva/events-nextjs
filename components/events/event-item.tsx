@@ -1,10 +1,9 @@
-import Image from 'next/image';
-import { Event } from '../../dummy-data';
 import styles from "./event-item.module.css";
 import Button from '../ui/button/button';
 import DateIcon from '../ui/icons/date-icon';
 import AddressIcon from '../ui/icons/address-icon';
 import ArrowRightIcon from '../ui/icons/arrow-right-icon';
+import { Event } from '../../helpers/api-utils';
 
 interface EventItemProps {
 	event: Event;

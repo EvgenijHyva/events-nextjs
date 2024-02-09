@@ -1,21 +1,23 @@
 "use client"
 import { useRouter } from 'next/router';
-import { getEventById } from '../../../dummy-data';
 import { notFound } from 'next/navigation';
 import EventSummary from '../../../components/event-detail/event-summary';
 import EventLogistics from '../../../components/event-detail/event-logistics';
 import EventContent from '../../../components/event-detail/event-content';
+import { Event, getEventById } from '../../../helpers/api-utils';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
+import { getAllEvents } from '../../../dummy-data';
 
-export default function EventsID() {
-	const router = useRouter()
+interface EventIdProps {
+	event: Event;
+}
 
-	const { id } = router.query;
-	console.log(router.query, router.pathname)
+interface ContextParams extends ParsedUrlQuery {
+	id: string;
+}
 
-	if (!id || typeof id !== "string") {
-		return;
-	}
-	const event = getEventById(id);
+export default function EventsID({ event }: EventIdProps) {
 
 	if (!event) {
 		notFound();
@@ -29,3 +31,19 @@ export default function EventsID() {
 		</EventContent>
 	</>);
 }
+
+export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async () => {
+	const events = await getAllEvents();
+	const paths = events.map(event => ({ params: { id: event.id } }));
+	return {
+		paths,
+		fallback: false
+	}
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+	const { id } = context.params as ContextParams;
+	const event = await getEventById(id)
+
+	return { props: { event } }
+} 
