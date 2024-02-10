@@ -2,7 +2,10 @@ import EventList from '../../../components/events/event-list';
 import ResultsTitle from '../../../components/events/results-title';
 import ErrorAlert from '../../../components/ui/errors/error-alert';
 import { GetServerSideProps } from 'next';
-import { Event, getFiltedEvents } from '../../../helpers/api-utils';
+import { Event, FirebaseEvents, getFiltedEvents, transFormedData } from '../../../helpers/api-utils';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { useEffect, useState } from 'react';
 
 interface FilteredEventsProps {
 	date: {
@@ -13,7 +16,44 @@ interface FilteredEventsProps {
 	events: Event[];
 };
 
+const loading = (): JSX.Element => {
+	return <p className='center'>Loading...</p>;
+}
+
+const errorMessage = (message: string): JSX.Element => {
+	return <p className='center'>{message}</p>
+}
+
 export default function FilteredEvents({ notFound, date: { year, month }, events }: FilteredEventsProps) {
+	const router = useRouter();
+	const [pageEvents, setPageEvents] = useState<Event[]>(events);
+	const [yearArg, monthArg] = router.query?.slug as string[];
+
+	if (!yearArg || !monthArg) {
+		loading();
+	}
+
+	// With client side fetch we should switch out getServerSideProps, otherwise it never executes
+	const searchDate = `${yearArg}-${+monthArg > 10 ? monthArg : `0${monthArg}`}`;
+	const apiUrl = `https://nextjs-events-afd6e-default-rtdb.firebaseio.com/events.json?orderBy="date"&startAt="${searchDate}"&endAt="${+yearArg + 1}"`;
+	const { data, error, isLoading } = useSWR(apiUrl);
+
+	if (isLoading) {
+		loading();
+	}
+
+	if (error) {
+		console.log(error);
+		errorMessage("Error occured during featch data");
+	}
+
+	useEffect(() => {
+		if (data) {
+			const filteredEvents = transFormedData(data as FirebaseEvents);
+			setPageEvents(filteredEvents);
+		}
+	}, [data]);
+
 
 	if (notFound) {
 		return <ErrorAlert><p>Invalid filter values :(</p></ErrorAlert>;
@@ -24,8 +64,8 @@ export default function FilteredEvents({ notFound, date: { year, month }, events
 
 	return <>
 		<ResultsTitle date={eventsDate.toDateString()} />
-		{events?.length ?
-			<EventList events={events} /> :
+		{pageEvents?.length ?
+			<EventList events={pageEvents} /> :
 			<ErrorAlert>
 				<p >No events found on {humanReadableDate} </p>
 			</ErrorAlert>}

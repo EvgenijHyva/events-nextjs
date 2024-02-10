@@ -14,13 +14,13 @@ export interface EventFilter {
 };
 
 interface FirebaseObj extends Omit<Event, "id"> { };
-interface FirebaseEvents extends Record<string, FirebaseObj> { };
+export interface FirebaseEvents extends Record<string, FirebaseObj> { };
 
 const APIURL = "https://nextjs-events-afd6e-default-rtdb.firebaseio.com/events.json";
 
 const transformFirebaseObj = (data: FirebaseObj, id: string): Event => ({ id, ...data });
 
-const transFormedData = (data: FirebaseEvents): Event[] => {
+export const transFormedData = (data: FirebaseEvents): Event[] => {
 	const events = [];
 	for (const key in data) {
 		events.push(transformFirebaseObj(data[key], key));

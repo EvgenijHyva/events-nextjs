@@ -52,7 +52,7 @@ export default function EventsSearch(props: EventsSearchProps) {
 					}
 				</select>
 			</div>
-			<Button link={false} onClick={() => { console.log("click") }}>
+			<Button link={false} onClick={() => { console.log("button click placeholder") }}>
 				Find the event
 			</Button>
 		</div>

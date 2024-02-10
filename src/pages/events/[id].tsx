@@ -1,13 +1,10 @@
 "use client"
-import { useRouter } from 'next/router';
-import { notFound } from 'next/navigation';
 import EventSummary from '../../../components/event-detail/event-summary';
 import EventLogistics from '../../../components/event-detail/event-logistics';
 import EventContent from '../../../components/event-detail/event-content';
-import { Event, getEventById } from '../../../helpers/api-utils';
+import { Event, getEventById, getFeaturedEvents } from '../../../helpers/api-utils';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { getFeaturedEvents } from '../../../dummy-data';
 
 interface EventIdProps {
 	event: Event;
@@ -31,7 +28,7 @@ export default function EventsID({ event }: EventIdProps) {
 
 export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async () => {
 	const events = await getFeaturedEvents();
-	const paths = events.map(event => ({ params: { id: event.id } }));
+	const paths = (events as Event[]).map(event => ({ params: { id: event.id } }));
 	return {
 		paths,
 		fallback: "blocking"
