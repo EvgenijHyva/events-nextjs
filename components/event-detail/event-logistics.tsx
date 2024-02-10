@@ -3,6 +3,7 @@ import DateIcon from '../ui/icons/date-icon';
 import LogisticsItem from './logistics-item';
 import styles from './event-logistics.module.css';
 import { Event } from '../../helpers/api-utils';
+import Image from 'next/image';
 
 
 interface EventLogisticsProps extends Pick<Event, "date" | "image" | "location" | "title"> { }
@@ -20,7 +21,7 @@ export default function EventLogistics(props: EventLogisticsProps) {
   return (
     <section className={styles.logistics}>
       <div className={styles.image}>
-        <img src={`/${image}`} alt={title} />
+        <Image src={`/${image}`} alt={title} width={250} height={160} />
       </div>
       <ul className={styles.list}>
         <LogisticsItem icon={DateIcon}>

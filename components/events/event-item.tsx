@@ -4,6 +4,7 @@ import DateIcon from '../ui/icons/date-icon';
 import AddressIcon from '../ui/icons/address-icon';
 import ArrowRightIcon from '../ui/icons/arrow-right-icon';
 import { Event } from '../../helpers/api-utils';
+import Image from 'next/image';
 
 interface EventItemProps {
 	event: Event;
@@ -26,7 +27,7 @@ export default function EventItem({ event }: EventItemProps) {
 
 	return (
 		<li className={styles.item}>
-			<img src={imageSrc} alt={event.title} className={styles.image} />
+			<Image src={imageSrc} alt={event.title} width={250} height={160} />
 			<div className={styles.content}>
 				<div className={styles.summary}>
 					<h2>{event.title}</h2>
