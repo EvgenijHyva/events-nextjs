@@ -1,4 +1,5 @@
 "use client"
+import Head from 'next/head';
 import EventSummary from '../../../components/event-detail/event-summary';
 import EventLogistics from '../../../components/event-detail/event-logistics';
 import EventContent from '../../../components/event-detail/event-content';
@@ -16,6 +17,12 @@ interface ContextParams extends ParsedUrlQuery {
 
 export default function EventsID({ event }: EventIdProps) {
 	return (event ? <>
+		<Head>
+			<title>Event: {event.title}</title>
+			<meta name='Event name' content={event.title} />
+			<meta name='keywords' content={event.title} />
+			<meta name='descriptiom' content={event.description} />
+		</Head>
 		<EventSummary title={event.title} />
 		<EventLogistics {...event} />
 		<EventContent>

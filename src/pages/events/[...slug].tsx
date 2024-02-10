@@ -1,9 +1,10 @@
 import EventList from '../../../components/events/event-list';
 import ResultsTitle from '../../../components/events/results-title';
 import ErrorAlert from '../../../components/ui/errors/error-alert';
-import { GetServerSideProps } from 'next';
 import { Event, FirebaseEvents, getFiltedEvents, transFormedData } from '../../../helpers/api-utils';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 
@@ -63,6 +64,10 @@ export default function FilteredEvents({ notFound, date: { year, month }, events
 	const humanReadableDate = eventsDate.toLocaleDateString("fi-FI", { month: '2-digit', year: "numeric" });
 
 	return <>
+		<Head>
+			<title>Events from {humanReadableDate}</title>
+			<meta name='descripton' content={`Events from ${humanReadableDate}-12.${year}`} />
+		</Head>
 		<ResultsTitle date={eventsDate.toDateString()} />
 		{pageEvents?.length ?
 			<EventList events={pageEvents} /> :

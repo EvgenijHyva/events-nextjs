@@ -1,6 +1,6 @@
 import EventList from '../../../components/events/event-list';
 import EventsSearch from '../../../components/events/events-search';
-
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Event, getAllEvents } from '../../../helpers/api-utils';
 
@@ -16,6 +16,9 @@ export default function Events({ events }: EventsProps) {
 		router.push(fullPath);
 	}
 	return <>
+		<Head>
+			<title>All events</title>
+		</Head>
 		<EventsSearch onSearch={findEventHandler} />
 		<EventList events={events} />
 	</>;
