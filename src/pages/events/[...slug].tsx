@@ -63,11 +63,13 @@ export default function FilteredEvents({ notFound, date: { year, month }, events
 	const eventsDate = new Date(+year, +month - 1)
 	const humanReadableDate = eventsDate.toLocaleDateString("fi-FI", { month: '2-digit', year: "numeric" });
 
+	const pageHeadData = (<Head>
+		<title>Events from {humanReadableDate}</title>
+		<meta name='descripton' content={`Events from ${humanReadableDate}-12.${year}`} />
+	</Head>)
+
 	return <>
-		<Head>
-			<title>Events from {humanReadableDate}</title>
-			<meta name='descripton' content={`Events from ${humanReadableDate}-12.${year}`} />
-		</Head>
+		{pageHeadData}
 		<ResultsTitle date={eventsDate.toDateString()} />
 		{pageEvents?.length ?
 			<EventList events={pageEvents} /> :

@@ -16,7 +16,6 @@ export default function Home({ featuredEvents }: HomeProps) {
         <title>Upcomming events</title>
         <meta name='description' content='Find a lot of great events for yourself' />
         <meta name='teck-stack' content='nextjs & typescript' />
-        <meta name='created by' content='Evgeny Hyvärinen' />
       </Head>
       <EventList events={featuredEvents} />
     </div>
