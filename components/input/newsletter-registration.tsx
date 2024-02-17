@@ -1,12 +1,25 @@
+import { FormEventHandler, useRef } from 'react';
 import classes from './newsletter-registration.module.css';
+import { isValidEmail } from '../../helpers/validation';
 
 export default function NewsletterRegistration() {
-	function registrationHandler(event: any) { //TODO
-		event.preventDefault();
+	const emailInputRef = useRef<null | HTMLInputElement>(null);
 
-		// fetch user input (state or refs)
-		// optional: validate input
-		// send valid data to API
+	const registrationHandler: FormEventHandler<HTMLFormElement> = (event) => {
+		event.preventDefault();
+		const email = emailInputRef.current?.value as string;
+
+		if (!isValidEmail(email)) {
+			console.error(`Email is not valid: ${email}`);
+		}
+
+		fetch("/api/newsletter", {
+			method: "POST",
+			body: JSON.stringify({ email }),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		}).catch(console.error)
 	}
 
 	return (
@@ -15,6 +28,7 @@ export default function NewsletterRegistration() {
 			<form onSubmit={registrationHandler}>
 				<div className={classes.control}>
 					<input
+						ref={emailInputRef}
 						type='email'
 						id='email'
 						placeholder='Your email'

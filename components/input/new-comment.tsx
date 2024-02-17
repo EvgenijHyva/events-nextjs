@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { FormEventHandler, useRef, useState } from 'react';
 import styles from './new-comment.module.css';
 import { Comment } from '../../helpers/types';
+import { isEmptyText, isValidEmail } from '../../helpers/validation';
 
 interface NewCommentProps {
 	onAddComment: (comment: Comment) => void;
@@ -13,22 +14,19 @@ export default function NewComment(props: NewCommentProps) {
 	const nameInputRef = useRef<null | HTMLInputElement>(null);
 	const commentInputRef = useRef<null | HTMLTextAreaElement>(null);
 
-	function sendCommentHandler(event: any) { //TODO
+	const sendCommentHandler: FormEventHandler<HTMLFormElement> = (event) => {
 		event.preventDefault();
 
-		const enteredEmail = emailInputRef.current?.value;
-		const enteredName = nameInputRef.current?.value;
-		const enteredComment = commentInputRef.current?.value;
+		const enteredEmail = emailInputRef.current?.value as string;
+		const enteredName = nameInputRef.current?.value as string;
+		const enteredComment = commentInputRef.current?.value as string;
 
 		if (
-			!enteredEmail ||
-			enteredEmail.trim() === '' ||
-			!enteredEmail.includes('@') ||
-			!enteredName ||
-			enteredName.trim() === '' ||
-			!enteredComment ||
-			enteredComment.trim() === ''
+			!isValidEmail(enteredEmail) ||
+			isEmptyText(enteredName) ||
+			isEmptyText(enteredComment)
 		) {
+			console.error(`Some of this values are empty: ${(JSON.stringify({ enteredEmail, enteredName, enteredComment }))}`);
 			setIsInvalid(true);
 			return;
 		}
@@ -41,7 +39,7 @@ export default function NewComment(props: NewCommentProps) {
 	}
 
 	return (
-		<form className={styles.form}>
+		<form className={styles.form} onSubmit={sendCommentHandler}>
 			<div className={styles.row}>
 				<div className={styles.control}>
 					<label htmlFor='email'>Your email</label>

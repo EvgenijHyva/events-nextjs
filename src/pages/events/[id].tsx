@@ -3,6 +3,7 @@ import Head from 'next/head';
 import EventSummary from '../../../components/event-detail/event-summary';
 import EventLogistics from '../../../components/event-detail/event-logistics';
 import EventContent from '../../../components/event-detail/event-content';
+import Comments from '../../../components/input/comments';
 import { Event, getEventById, getFeaturedEvents } from '../../../helpers/api-utils';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
@@ -28,6 +29,7 @@ export default function EventsID({ event }: EventIdProps) {
 		<EventContent>
 			<p>{event.description}</p>
 		</EventContent>
+		<Comments eventId={event.id} />
 	</> : <div className='center'>
 		<p>Loading...</p>
 	</div>);
