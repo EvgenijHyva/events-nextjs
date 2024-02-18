@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { isEmptyText, isValidEmail } from '../../../../helpers/validation';
 import { v4 as uuid } from "uuid";
+import { DbComment } from '../../../../helpers/types';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { eventId } = req.query;
@@ -28,7 +29,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 		res.status(201).json({ message: "Added comment", comment: newComment })
 	}
 	if (req.method === "GET") {
-		const comments = [{ id: "1", name: "Test", comment: "first test comment" }, { id: "2", name: "Test1", comment: "secont test comment" }]
+		const comments: DbComment[] = [{ id: "1", name: "Test", text: "first test comment" }, { id: "2", name: "Test1", text: "secont test comment" }]
 		res.status(200).json({ comments });
 	}
 };

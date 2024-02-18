@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import CommentList from './comment-list';
 import NewComment from './new-comment';
 import styles from './comments.module.css';
-import { Comment } from '../../helpers/types';
+import { Comment, DbComment } from '../../helpers/types';
 
 interface CommnetsProps {
 	eventId: string;
@@ -13,10 +13,22 @@ function Comments(props: CommnetsProps) {
 	const { eventId } = props;
 
 	const [showComments, setShowComments] = useState(false);
+	const [comments, setComments] = useState<DbComment[]>([]);
 
 	function toggleCommentsHandler() {
 		setShowComments((prevStatus) => !prevStatus);
 	}
+
+	useEffect(() => {
+		if (showComments) {
+			fetch(`/api/comments/${eventId}`)
+				.then(data => data.json())
+				.then(({ comments }: { comments: DbComment[] }) => {
+					setComments(comments);
+				})
+				.catch(console.error)
+		}
+	}, [showComments])
 
 	function addCommentHandler(commentData: Comment) {
 		// send data to API
@@ -35,7 +47,7 @@ function Comments(props: CommnetsProps) {
 				{showComments ? 'Hide' : 'Show'} Comments
 			</button>
 			{showComments && <NewComment onAddComment={addCommentHandler} />}
-			{showComments && <CommentList />}
+			{showComments && <CommentList comments={comments} />}
 		</section>
 	);
 }

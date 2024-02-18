@@ -1,21 +1,21 @@
+import { Comment, DbComment } from '../../helpers/types';
 import styles from './comment-list.module.css';
 
-export default function CommentList() {
+interface CommentListProps {
+	comments: DbComment[]
+}
+
+export default function CommentList({ comments }: CommentListProps) {
 	return (
 		<ul className={styles.comments}>
-			{/* Render list of comments - fetched from API */}
-			<li>
-				<p>My comment is amazing!</p>
-				<div>
-					By <address>Maximilian</address>
-				</div>
-			</li>
-			<li>
-				<p>My comment is amazing!</p>
-				<div>
-					By <address>Maximilian</address>
-				</div>
-			</li>
+			{comments.map((comment) => {
+				return <li key={comment.id}>
+					<p>{comment.text}</p>
+					<div>
+						By <address>{comment.name}</address>
+					</div>
+				</li>
+			})}
 		</ul>
 	);
 };

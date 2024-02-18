@@ -19,7 +19,7 @@ interface ContextParams extends ParsedUrlQuery {
 export default function EventsID({ event }: EventIdProps) {
 	return (event ? <>
 		<Head>
-			<title>Event: {event.title}</title>
+			<title>Event: {event.title.toString()}</title>
 			<meta name='Event name' content={event.title} />
 			<meta name='keywords' content={event.title} />
 			<meta name='descriptiom' content={event.description} />
