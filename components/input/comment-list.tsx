@@ -6,7 +6,7 @@ interface CommentListProps {
 }
 
 export default function CommentList({ comments }: CommentListProps) {
-	return (
+	return (comments.length ?
 		<ul className={styles.comments}>
 			{comments.map((comment) => {
 				return <li key={comment.id}>
@@ -16,6 +16,6 @@ export default function CommentList({ comments }: CommentListProps) {
 					</div>
 				</li>
 			})}
-		</ul>
+		</ul> : <p>No comments so far</p>
 	);
 };

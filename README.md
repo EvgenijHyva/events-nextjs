@@ -38,3 +38,15 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+# Mongo Db used for storage
+
+```bash
+#connection string
+mongodb+srv://<user>:<password>@eventscluster.wjws7na.mongodb.net/?retryWrites=true&w=majority
+```
+
+#### Setting up mongodb
+The important to have an user with credentials for example some eventsdaemon.
+The another important thing is to create network access for server where request are comming from (configuring on mongodb.com cloud).

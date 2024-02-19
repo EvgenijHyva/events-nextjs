@@ -1,10 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { isEmptyText, isValidEmail } from '../../../../helpers/validation';
-import { v4 as uuid } from "uuid";
+import client from '../../../../storage/dbclient';
 import { DbComment } from '../../../../helpers/types';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { eventId } = req.query;
+	await client.connect();
+	const collection = await client.db("events").collection("comments");
 
 	if (req.method === "POST") {
 		const { email, name, text } = req.body;
@@ -18,18 +20,26 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 			return;
 		}
 
-		console.log("OK", email, name, text)
-
 		const newComment = {
-			id: uuid(),
 			email,
 			name,
-			text
+			text,
+			eventId
 		}
-		res.status(201).json({ message: "Added comment", comment: newComment })
+
+		await collection.insertOne(newComment).then(data => {
+			console.log(data)
+			res.status(201).json({ message: "Added comment", commentId: data.insertedId })
+		}).catch(err => {
+			console.error(err)
+			res.status(500).json({ message: "Failed to add comment" })
+		});
+
 	}
 	if (req.method === "GET") {
-		const comments: DbComment[] = [{ id: "1", name: "Test", text: "first test comment" }, { id: "2", name: "Test1", text: "secont test comment" }]
-		res.status(200).json({ comments });
+		const comments = await collection.find({ eventId }).sort({ _id: -1 }).toArray(); //Descending order
+		const responseComments = comments.map(comment => new DbComment(comment));
+		res.status(200).json({ comments: responseComments });
 	}
+	client.close()
 };
