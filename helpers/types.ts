@@ -21,3 +21,11 @@ export class DbComment implements DbComment {
 		this.text = document.text
 	}
 }
+
+type NotificationStatus = "success" | "pending" | "error";
+
+export interface NotificationProps {
+	title: string;
+	message: string;
+	status: NotificationStatus;
+}

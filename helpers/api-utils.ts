@@ -16,7 +16,7 @@ export interface EventFilter {
 interface FirebaseObj extends Omit<Event, "id"> { };
 export interface FirebaseEvents extends Record<string, FirebaseObj> { };
 
-const APIURL = "https://nextjs-events-afd6e-default-rtdb.firebaseio.com/events.json";
+const APIURL = process.env.FIREBASE_APIURL as string;
 
 const transformFirebaseObj = (data: FirebaseObj, id: string): Event => ({ id, ...data });
 

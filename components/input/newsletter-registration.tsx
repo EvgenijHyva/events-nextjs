@@ -1,8 +1,11 @@
 import { FormEventHandler, useRef } from 'react';
 import classes from './newsletter-registration.module.css';
 import { isValidEmail } from '../../helpers/validation';
+import { NotificationContext } from '../../store/notification-context';
+import { useContext } from 'react';
 
 export default function NewsletterRegistration() {
+	const notificationContext = useContext(NotificationContext);
 	const emailInputRef = useRef<null | HTMLInputElement>(null);
 
 	const registrationHandler: FormEventHandler<HTMLFormElement> = (event) => {
@@ -12,6 +15,11 @@ export default function NewsletterRegistration() {
 		if (!isValidEmail(email)) {
 			console.error(`Email is not valid: ${email}`);
 		}
+		notificationContext.showNotification({
+			title: "Signing up",
+			message: "Registering for news letter",
+			status: "pending"
+		})
 
 		fetch("/api/newsletter", {
 			method: "POST",
@@ -19,7 +27,28 @@ export default function NewsletterRegistration() {
 			headers: {
 				"Content-Type": "application/json"
 			}
-		}).catch(console.error)
+		}).then(response => {
+			if (response.ok) {
+				return response.json();
+			}
+			return response.json().then(data => {
+				throw new Error(data.message || "Something went wrong")
+			})
+		}).then(data => {
+			notificationContext.showNotification({
+				title: "Signing up successful",
+				message: `Your email (${email}) have been signed up for newsletters`,
+				status: "success"
+			})
+			return data;
+		}).catch(err => {
+			console.error(err);
+			notificationContext.showNotification({
+				title: "Signing up failed",
+				message: err.message || "Error occured during registration process, please try again",
+				status: "error"
+			})
+		})
 	}
 
 	return (
